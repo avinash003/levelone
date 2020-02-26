@@ -1,0 +1,164 @@
+____________________________________________________________________________________________________________                     
+					   DOCUMENT FOR LEMP ON UBUNTU
+____________________________________________________________________________________________________________					 
+
+          # apt install nginx
+
+          # apt install php-fpm
+
+          # systemctl start nginx
+
+          # mkdir -p /var/www/html/sa.com
+
+          # vi /var/www/html/sa.com
+
+          # chmod -Rf 775 /var/www/html/sa.com
+
+          # chown -Rf www-data.www-data /var/www/html/sa.com/
+________________________________________________________________________________________________________________________________________________________________________________________________________________________
+                 
+				 
+		Configure the domain in ETC
+
+            # vi /etc/nginx/sites-available/sa.com.conf
+
+             server {
+                listen 80;
+    
+
+                server_name www.sa.com;
+        
+                root /var/www/html/sa.com;
+                index index.html index.php;
+
+                 location / {
+                 try_files $uri $uri/ =404;
+               }
+
+          location ~ \.php$ {
+                include snippets/fastcgi-php.conf;
+                fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+                }
+
+              location ~ /\.ht {
+                 deny all;
+             }
+	          }
+			  
+			  
+            # ln -s /etc/nginx/sites-available/sa.com.conf /etc/nginx/sites-enable/
+
+            # nginx -t 
+________________________________________________________________________________________________________________________________________________________________________________________________________________________
+	             
+				 MAKE HOST ENTRY ON YOUR MAIN WINDOW MACHINE 
+
+            # systemctl restart nginx
+
+            # systemctl restart php7.2-fpm.service
+
+          NOW GO TO URL AND TYPE THE ADDRESS //www.sa.com
+________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+
+                        *INSTALL    MYSQL*
+ 
+
+             # apt install mysql-server
+
+             # mysql_secure_installation
+
+             # apt install phpmyadmin
+
+             # systemctl start mysql
+
+             # mysql -u root -p
+
+            > create user 'avi'@'localhost' identified by 'temp';
+
+            > grant all privileges on *.* to 'avi'@'localhost';
+
+            > flush privileges;
+            > exit;
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+
+                   CONFIGURE THE PHPMYADMIN IN SITES_AVAILABLE
+				   
+             # ln -s /usr/share/phpmyadmin/ /var/www/html/
+
+             # vi /etc/nginx/sites-available/sa.com.conf
+
+
+              server {
+             listen 80;
+ 
+             server_name www.sa.com;
+ 
+             root /var/www/html/phpmyadmin;
+             index index.html index.php;
+
+             location / {
+                try_files $uri $uri/ =404;
+           }
+
+              location ~ \.php$ {
+              include snippets/fastcgi-php.conf;
+               fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+        }
+
+           location ~ /\.ht {
+              deny all;
+       }
+             }
+
+            # ln -s /etc/nginx/sites-available/sa.com.conf /etc/nginx/sites-enabled/
+			
+			#  nginx -t
+            
+			# systemctl restart nginx.service
+
+            # systemctl restart php7.2-fpm.service
+ 
+ 
+ 
+	              now visit the site 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	

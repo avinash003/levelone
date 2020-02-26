@@ -1,0 +1,166 @@
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+   
+   How to configure LAMP
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+
+
+* Step 1#
+
+* Configure Statick Ip 
+
+vi /etc/netplan/50-cloud-init.yaml
+
+* network:
+> version: 2
+> ethernets:
+* enp0s3:
+* addresses: [192.168.72.66/24]
+* gateway4: 192.168.72.1
+* dhcp4: no
+* nameservers:
+* addresses: [8.8.8.8]
+
+
+***********************************************
+# netplan apply
+
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+
+     Now install Apache2!
+
+  # apt-get install apache2
+
+    Now Create Directory For Apache For Html Site.
+
+  # mkdir -p /var/www/html/domain.com
+
+   # vi /var/www/html/domain.com/index.html
+
+      Hello world
+
+
+*****************************************************************
+      GIVE PERMISSIONS AND OWNERSHIP
+	  
+  # chmod -Rf 775 /var/www/html/domain.com 
+
+  # chown -Rf www-data:www-data /var/www/html/domain.com
+
+****************************************************************
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+
+   Configure Sub-domain 
+
+   #  vi /etc/apache2/site-available/domain.com.conf
+
+<VirtualHost *:80>
+    ServerAdmin root@localhost
+    ServerName www.domain.com
+    DirectoryIndex index.html index.php
+    DocumentRoot /var/www/html/domain.com
+</VirtualHost>
+
+*******************************************************************
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+
+Go To Main Window Machine 
+ 
+Open windows/system32/drivers/ets/hosts
+
+192.168.72.66 domain.com www.domain.com
+
+
+********************************************************************
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+
+
+               Back To Linux Machine 
+
+               Restart Apache2
+
+  # systemctl restart apache2
+
+  # a2ensite domain.com
+  # apache2ctl configtest
+**********************************************************
+         Go To Windows Machine Open Browser
+  Type Address Www.Domain.Com It Will Print Hello World
+
+****************************************************************
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+
+    Now Install Mysql Server Php And Phpmyadmin On Linux Machine
+
+  # apt-get install mysql-server php phpmyadmin
+
+
+* After Installation Go To Mysql by using Command And add New User and give that user All Privileges:
+
+  # mysql -u root -p
+
+> create user 'avi'@'localhost' identified by 'temp';
+
+>grant all privileges on *.* to 'avi'@'localhost';
+
+>flush privileges;
+>exit;
+*********************************************************************
+
+Go To Windows Machine Open Browser And Typ Url - Www.Domain.Com/Phpmyadmin
+
+Now Log In With User - Avi  Password Temp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

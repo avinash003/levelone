@@ -1,0 +1,97 @@
+    
+____________________________________________________________________________________________________________
+                       CONFIGURE REDISADMIN ON LAMP 
+____________________________________________________________________________________________________________	 
+	
+  
+  
+   
+     # apt install apache2
+     # apt install memcached libmemcached-tools
+     # apt install php-mysql php-gd php-ldap php-xml php-xmlrpc php-mbstring  curl 
+	 # apt install mysql-server
+
+____________________________________________________________________________________________________________
+____________________________________________________________________________________________________________  	 
+  Now Create A Directory For Domain And Configure Domain
+	
+	 # mkdir -p /var/www/html/sa.com
+	 # vi /var/www/html/sa.com/index.html
+	 
+	Put Your Content in This File^
+	
+  Give Permissions 
+  
+  
+    # chmod -Rf 775 /var/www/html/sa.com
+	# chown -Rf www-data.www-data /var/www/html/sa.com
+
+____________________________________________________________________________________________________________
+____________________________________________________________________________________________________________  	
+  
+   Now Download PhpMemCached From GitHub
+ 
+ 
+    # cd /var/www/
+	
+	# wget https://github.com/hgschmie/phpmemcacheadmin/archive/master.zip
+	
+	# unzip master.zip
+	
+	# mv /var/www/phpmemcacheadmin-master /var/www/phpMemcachedAdmin
+	
+	# chmod -Rf 775 phpMemcachedAdmin/
+	
+	# chown -Rf www-data.www-data phpMemcachedAdmin/
+	
+____________________________________________________________________________________________________________
+____________________________________________________________________________________________________________  
+
+     Configure Your Domain In Apache Configration File And MemCachedAdmin Configration
+ 
+  
+   <VirtualHost *:80>
+    ServerAdmin root@localhost
+    ServerName www.sa.com
+    DirectoryIndex index.html index.php
+    DocumentRoot /var/www/phpMemcachedAdmin
+    Directory /var/www/phpMemcachedAdmin>
+    Order Deny,Allow
+    Allow from all granted
+    Allow from 127.0.0.1
+    </Directory>
+    <Directory /var/www/phpMemcachedAdmin>
+    AuthUserFile /etc/apache2/sites-available/.htpasswd
+    AuthName admin
+    AuthType Basic
+    require user admin
+    </Directory>
+	</VirtualHost>
+	
+    # htpasswd -cm /etc/apache2/sites-available/.htpasswd admin
+____________________________________________________________________________________________________________
+____________________________________________________________________________________________________________  
+  Now Restart Apache and Enable The Site
+     
+	# a2ensite sa.com.conf
+	
+	# systemctl restart apache2
+	
+	# systemctl start memcached
+	
+ Now Go to The Browser And Type ThE URL //www.sa.com
+
+____________________________________________________________________________________________________________
+____________________________________________________________________________________________________________  
+
+
+
+
+
+
+
+
+
+	
+
+	

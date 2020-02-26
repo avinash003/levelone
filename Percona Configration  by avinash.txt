@@ -1,0 +1,211 @@
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+    
+   
+   Configration For Percona-XtraDB-Cluster-5.7
+
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+
+    *:Open Firewall First:*
+
+  #firewall-cmd --permanent --add-port={3306/tcp,4444/tcp,4567/tcp,4568/tcp}
+  #systemctl enable firewalld
+  #systemctl start firewalld
+
+              Reload the Firewall
+    
+   #firewall-cmd --reload
+    
+   *:List Firewall To check:*
+  
+  # firewall-cmd --list-all
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+
+   *:Disable SELINUX:*
+  
+  #vi /etc/selinux/conf
+       *:Check Status:*
+ 
+  #sestatus
+
+  
+   #init 6 
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+
+
+   Now Comes The installation part 
+
+  # yum install -y http://www.percona.com/downloads/percona-release/redhat/0.1-6/percona-release-0.1-6.noarch.rpm
+
+  # vi /etc/yum.repos.d/percona-release.repo 
+
+   "change the "gpgcheck" state from 1 to 0"
+  
+  # yum install -y Percona-XtraDB-Cluster-57
+  
+  # systemctl start myqld
+
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+
+
+  # grep password /var/log/mysqld.log
+
+
+
+  
+  "it will show you temporary password copy that password'
+
+  # mysql_secure_installation
+
+ *:Put the Password which you coppied from log on root and it will ask you to feed new pasword:*
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+
+
+   Now Edit Configration file of mysql And please stop the service of mysql before installation****
+
+     # systemctl stop mysql
+     # vi /etc/my.cnf
+   
+  *:paste this over there:*
+
+[mysqld]
+wsrep_provider=/usr/lib64/galera3/libgalera_smm.so
+wsrep_cluster_name=democluster
+wsrep_cluster_address=gcomm://192.168.72.65,192.168.72.66
+wsrep_node_name=percona1
+wsrep_node_address=192.168.72.65
+wsrep_sst_method=xtrabackup-v2
+wsrep_sst_auth=sstuser:temp
+pxc_strict_mode=ENFORCING
+binlog_format=ROW
+default_storage_engine=InnoDB
+innodb_autoinc_lock_mode=2
+ 
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+ 
+    *:Start mysql bootstrap:*
+    
+ # systemctl start mysql@bootstrap
+
+ *:Create new user in mysql it should be same as you mentioned in conf file "wsrep_sst_auth=":*
+ 
+  #mysql -u root -p
+   
+  > CREATE USER 'sstuser'@'localhost' IDENTIFIED BY 'temp';
+  > GRANT RELOAD, LOCK TABLES, REPLICATION CLIENT ON *.* TO 'sstuser'@'localhost';
+  > FLUSH PRIVILEGES;
+  > EXIT;
+
+  *:Open log in Background To Check conectivity and ERRORS:*
+
+  # tail -f /var/lib/mysql/percona1.err
+ 
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+
+     MAKE SECOND NODE FOLLOW SAME STEP WHICH MENTION UPPER TILL INSTALLATION
+
+
+  *:Stop The Service of Mysql and Change the configration file of mysql:*
+
+   # vi /etc/my.cnf
+
+
+ [mysqld]
+ wsrep_provider=/usr/lib64/galera3/libgalera_smm.so
+ wsrep_cluster_name=democluster
+ wsrep_cluster_address=gcomm://192.168.72.65,192.168.72.66
+ wsrep_node_name=percona2
+ wsrep_node_address=192.168.72.66
+ wsrep_sst_method=xtrabackup-v2
+ wsrep_sst_auth=sstuser:temp
+ pxc_strict_mode=ENFORCING
+ binlog_format=ROW
+ default_storage_engine=InnoDB
+ innodb_autoinc_lock_mode=2
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+   
+  *:Save THis And Start Mysql And Put The root PAssword of mysql which you given on node 1:*
+
+
+  #systemctl start mysql
+
+  # mysql -u root -p
+ 
+  >show status like 'wsrep%'
+
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+
+  *: Create A DAtabase On Any Of Node for Check The Replication:*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+apt remove --purge  percona-xtradb-cluster-5.7\*
+
+
+
+
+
+
+ dpkg --configure -a
+
+
+
+
+
+
+
+
+
+
+
+

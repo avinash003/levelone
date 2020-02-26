@@ -1,0 +1,196 @@
+______________________________________________________________________________________________________________
+
+                USER GROUP MANAGEMENT AND PERMISSIONS
+______________________________________________________________________________________________________________
+
+                           Creating a User >>
+						   
+						  
+               # useradd sam   >>to add user<<
+					
+		       # usermod -m sam >>  -m creates a home directory <<
+					
+		       # passwd   sam   >>to give passwd to user<<
+					
+	
+		Create a User with Specific User ID And group ID
+					
+	        	# useradd -u 1015	jack >> -u to use for user id <<
+				
+	      		# useradd -g 1025   mind >> -g used for give unique group id<<
+				
+				
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+				
+                  Add a User to Multiple Groups
+  				
+
+	         	# useradd -G admins,backend,frontend sam
+	
+			
+	   Create a User with Account Expiry Date
+				
+							
+		Change User Login Shell Of New User
+				
+			   
+              # useradd -s /sbin/nologin team 
+		
+   
+        Change User Login Shell Of Existing User		
+
+ 
+      	 	   # usermod -s /bin/bash team
+             
+
+	   Add a User with Specific Home Directory
+ 
+ 
+             # usderadd -d /opt/team team
+
+
+____________________________________________________________________________________________________________
+____________________________________________________________________________________________________________
+           
+                      Groups Managment
+				 
+			Remove user from group using gpasswd
+
+				
+				# gpasswd -d group user
+				
+			Add single USER in MULTIPLE Existing Groups.
+			  
+			   # usermod -a -G group1,group2 user
+  
+                 # groupadd  mike >>To create Group<<
+                   
+			
+			
+____________________________________________________________________________________________________________
+____________________________________________________________________________________________________________		
+			
+			             Changing File Ownership 
+			                    
+		  chown www-data:git avi
+  
+  chown www-data:www-data avi
+  
+  
+  In case you want to change group-owner only, use the command.....
+  
+  
+  chgrp group_name filename
+  
+  example current : chgrp root root test1
+  
+  after chnage : chgrp root test1
+				 
+    The chown command allows you to change the user and/or group ownership of a given file, directory, or symbolic link.
+  
+      
+      
+
+chown [OPTIONS] USER[:GROUP] FILE(s)
+1.User - A user is the owner of the file. By default, the person who created a file becomes its owner. 
+          Hence, a user is also sometimes called an owner. 
+
+
+
+ 2.Group - A user- group can contain multiple users. All users belonging to a group will have the same access permissions to the file. 
+           Suppose you have a project where a number of people require access to a file. Instead of manually assigning permissions to 
+		   each user, you could add all users to a groupand assign group permission to file such that only this group members and no 
+		   one else can read or modify the files.
+ 
+ 3.Other - Any other user who has access to a file. This person has neither created the file, nor he belongs to a usergroup who could
+           own the file. Practically, it means everybody else. Hence, when you set the permission for others, it is also referred as set 
+		   permissions for the world.
+		   
+		
+____________________________________________________________________________________________________________
+____________________________________________________________________________________________________________
+
+                      PERMISSIONS
+
+
+ 1.Read - This permission give you the authority to open and read a file. Read permission on a directory gives you the ability to lists 
+          its content.
+
+ 2.Write - The write permission gives you the authority to modify the contents of a file. The write permission on a directory gives you
+           the authority to add, remove and rename files stored in the directory.
+
+ 
+ 3.Execute - In Windows, an executable program usually has an extension ".exe" and which you can easily run. In Unix/Linux, you cannot run 
+             a program unless the execute permission is set. If the execute permission is not set, you might still be able to see/modify 
+			 the program code(provided read & write permissions are set), but not run it.
+			 
+			 
+			 
+ NOTE: r = read permission
+       w = write permission 
+       x = execute permission
+       - = no permission   
+	   
+____________________________________________________________________________________________________________
+____________________________________________________________________________________________________________	   
+	   
+#########Absolute(Numeric) Mode###############
+
+
+ Number	                        Permission Type	                                 Symbol
+ 
+  0	                             No Permission	                                   ---
+
+  1	                              Execute	                                       --x
+
+  2	                               Write	                                       -w-
+
+  3	                             Execute + Write	                               -wx
+
+  4	                               Read	                                           r--
+
+  5	                             Read + Execute	                                   r-x
+
+  6	                             Read +Write	                                   rw-
+
+  7	                           Read + Write +Execute	                           rwx
+  
+  
+ chmod 775 filename or directory 
+  
+
+  
+____________________________________________________________________________________________________________
+____________________________________________________________________________________________________________
+  
+  
+  
+  
+        
+
+        
+
+
+
+
+ 
+
+
+        
+
+ 
+   
+
+
+
+
+
+
+  
+              
+				
+				 
+
+				
+			    

@@ -1,0 +1,96 @@
+  Engine-X 
+     
+
+    	 Custom configuration to Nginx can be made by placing files in the /data/web/nginx directory inside your home directory.
+       
+	   
+    How to configure Redis-Server And PhpRedisAdmin on Nginx
+____________________________________________________________________________________________________________
+____________________________________________________________________________________________________________  
+         Configure LEMP And Redis Server
+           
+
+            # ufw disable
+            
+			# apt install nginx
+
+            # apt-get install mysql-server
+            
+			# mysql_secure_installation
+            
+			# apt-get install php-fpm
+            
+			# apt install redis-server
+            # apt install php-mysql php-gd php-ldap php-xml php-xmlrpc php-mbstring  curl 
+________________________________________________________________________________________________________________________________________________________________________________________________________________________     
+	 
+	 Create  A Directory For Domain
+
+     
+         # mkdir -p /var/www/html/sa.com
+ 
+         # vi /var/www/html/sa.com/index.html
+
+     Give Them Permission And Ownership
+	 
+	      # chmod -Rf 775 /var/www/html/sa.com
+         
+          # chown  -Rf www-data.www-data /var/www/html/sa.com
+         
+ ______________________________________________________________________________________________________________________________________________________________________________________________________________________ 
+     
+     Now Install PhpRedisAdmin From Git Repo
+             
+		 # cd /var/www/html/
+         # git clone https://github.com/ErikDubbelboer/phpRedisAdmin.git
+         # cd phpRedisAdmin
+         # git clone https://github.com/nrk/predis.git vendor
+         # cp /var/www/html/phpRedisAdmin/includes/config.sample.inc.php config.inc.php     
+		
+______________________________________________________________________________________________________________________________________________________________________________________________________________________	     
+				
+	Now Configure The Site In Etc Nginx File
+
+		# vi /etc/nginx/sites-available/sa.com.conf
+		
+        server {
+          listen 80;
+          listen 192.168.72.69:80;
+
+            server_name www.sa.com;
+            root /var/www/html/phpRedisAdmin;
+            index index.html index.php;
+  
+            location / {
+                try_files $uri $uri/ =404;
+           }
+ 
+       location ~ \.php$ {
+          include snippets/fastcgi-php.conf;
+          fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+      }
+
+         location ~ /\.ht {
+          deny all;
+     }
+	 }
+	
+
+    Link The Configration From Sites-available To Sites-enabled/
+
+         #ln -s /etc/nginx/sites-available/sa.com/ /etc/nginx/sites-enabled/
+
+________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+	
+     Now Restart The Nginx And PHP-FPM
+
+
+     	#systemctl restart nginx 
+
+	    #systemctl restart php7.2-fmp
+	
+        #systemctl start redis-server	
+
+	
+	

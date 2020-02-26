@@ -1,0 +1,99 @@
+______________________________________________________________________________________________________________
+
+                            WordPress Configuration
+______________________________________________________________________________________________________________
+
+                      Configure LAMP And disable Firewall
+					   
+					   
+		# apt install apache2 php php-mysql mysql-server libapache2-mod-php 
+		
+		# apt install php-common php-mbstring php-xmlrpc php-gd php-xml php-zip php-curl 
+		
+        # ufw disable
+		 
+		 
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+
+
+                    CREATE WordPress Database
+
+
+                    #  mysql -u root -p
+
+               > CREATE DATABASE wordpress;
+
+               > CREATE USER 'admin'@'localhost' IDENTIFIED BY 'temp';
+			   
+			   >  GRANT ALL PRIVILEGES ON wordpress.* TO 'admin'@'localhost';
+			   >  FLUSH PRIVILEGES;
+               >  EXIT;
+			   
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+
+                        Download WordPress 
+
+                 # cd /var/www/html
+                 
+				 # wget https://wordpress.org/latest.tar.gz
+				 
+				 # tar -zxvf latest.tar.gz
+				 
+				 # chown -Rf www-data:www-data /var/www/html/wordpress/
+				 
+				 # chmod -Rf 775 /var/www/html/wordpress/
+				 
+				 # cp /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php
+				 
+				 >>Put the Values you created for your database and save<<
+				 
+				 
+				 #  vi wordpress/wp-config.php
+				 
+				  @  define('DB_NAME', 'wordpress');
+				  
+				  @  define('DB_USER', 'admin');
+				  
+				  @  define('DB_PASSWORD', 'temp');
+				  
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+
+                          Configure Apache2 For WordPress
+
+                  # vi /etc/apache2/sites-available/site.com.conf
+
+                
+<VirtualHost *:80>
+     DocumentRoot /var/www/html/wordpress/
+     ServerName www.site.com
+     ServerAlias www.site.com
+     DirectoryIndex index.html index.php
+     <Directory /var/www/html/wordpress/>
+        Options +FollowSymlinks
+        AllowOverride All
+        Require all granted
+     </Directory>
+
+     ErrorLog ${APACHE_LOG_DIR}/error.log
+     CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+</VirtualHost>
+				  
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+
+                  Enable Site  And Restart Apache2
+
+              # a2ensite site.com.conf
+
+              # systemctl restart apache2		
+
+     Now Visite Site and condigure Wordpress http://www.site.com
+
+			  
+				 
+				 
+						

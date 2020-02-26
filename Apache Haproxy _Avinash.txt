@@ -1,0 +1,108 @@
+____________________________________________________________________________________________________________
+
+                           How to Configure HAproxyy
+____________________________________________________________________________________________________________                   		
+				
+	you have to take atleast 3 node for this configuration
+					192.168.72.65 node1 webserver
+		            192.168.72.66 node2 webserver
+                    192.168.72.61 haproxy load balancer
+			************************************************
+____________________________________________________________________________________________________________	
+	Configure a Domain with same name on node 1 and node 2
+____________________________________________________________________________________________________________	
+          Node 1 install apache2  and Disable firewall 
+ 
+          #  hostnamectl set-hostname web1
+ 
+          #  ufw disable   {Disable The Firewall}
+ 
+          #  init 6
+ 
+          #  apt install apache2
+ 
+          #  mkdir -p /var/www/html/bulk.com
+ 
+          #  vi /var/www/html/bulk.com/index.html
+ 
+            Give Permission to Directory OF Domain
+	   
+         #  chown -Rf www-data:www-data /var/www/html/bulk.com
+         #  chmod -Rf 775 /var/www/html/bulk.com
+
+________________________________________________________________________________________________________________________________________________________________________________________________________________________    
+            Configure Domain In Apache Sites-Avialable
+      
+
+          # vi /etc/apache2/sites-available/bulk.com.conf
+ 
+
+  <VirtualHost *:80>
+    serverAdmin root@localhost 
+    ServerName www.bulk.com
+    DirectoryIndex index.html index.php
+    DocumentRoot /var/www/html/bulk.com
+  </VirtualHost>	
+
+    #  systemctl restart apache2	
+    #  a2ensite bulk.com
+    #  apache2ctl -t
+________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+  Follow the same step on node 2 and change the ip-Address in "/etc/apache2/sites-available/bulk.com.conf" file
+______________________________________________________________________________________________________________________________________________________________________________________________________________________
+    
+   
+        Now come to HAproxyy node and install the haproxy
+   
+     
+        #  apt install haproxy
+		
+		 Edit The Conf File For Server Configuration
+		 
+        # vi /etc/haproxy/haproxy.cfg  
+   
+  frontend haproxynode
+    bind *:80
+    mode http
+    default_backend backendnodes
+
+backend backendnodes
+    balance roundrobin
+    option forwardfor
+    http-request set-header X-Forwarded-Port %[dst_port]
+    http-request add-header X-Forwarded-Proto https if { ssl_fc }
+    option httpchk HEAD / HTTP/1.1\r\nHost:localhost
+    server web1 192.168.72.63:80 check
+    server web2 192.168.72.65:80 check
+
+  listen stats
+    bind :8080
+    stats enable
+    stats uri /haproxy/stats
+    stats hide-version
+    stats auth avi:temp
+    stats refresh 30s
+________________________________________________________________________________________________________________________________________________________________________________________________________________________	
+    Now verify configuration file before restarting service using the following command
+
+
+   # haproxy -c -f /etc/haproxy/haproxy.conf
+ 
+   # systemctl restart haproxy.service
+ 
+ ______________________________________________________________________________________________________________________________________________________________________________________________________________________
+ 
+   Now go to host windows machine on this Location  
+ 
+ 
+ C:\Windows\System32\drivers\etc and put ip in host file 
+ 
+ 
+ 192.168.72.65 web1 www.bulk.com
+ 192.163.72.66 web2 www.bulk.com
+ 
+ open browser and typre HAproxy ip 192.168.72.61 and refresh this it wil automaticlly redirect you
+ 
+ 
+ 

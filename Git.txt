@@ -1,0 +1,86 @@
+______________________________________________________________________________________________________________
+
+                             GIT On LINUX
+______________________________________________________________________________________________________________
+
+                        INSTALLATION PROCESS OF GIT
+ 
+                 
+                          	  
+			    >:First-Time Git Setup / Configuration:<<		      
+					  
+				  Sign Up your Git Account On www.github.com
+					
+      				>>:Sets up Git with your name:<<
+                
+                              
+                          # apt-get install git  /Ubuntu
+							 
+                          # git config --global user.name "avinash003"
+
+                          # git config --global user.email "aviofficial3331@gmail.com" 
+
+                       	  
+                        
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+			
+			
+			>>:Go to your github account and create a repository with a name "mygit" :<<
+			  :Repository name should be same as you created on your local machine:
+
+                     Then Open git repo And Copy  Https git Link 
+					 it should be like this "https://github.com/avinash003/mygit.git"
+					
+				#	cd /home
+                
+				# git clone https://github.com/avinash003/mygit.git
+				
+		>>: Now You Have Successfully Created a Git Repository Clone From Yous Github Account:<<
+		
+		       # cd mygit/
+			   
+			   # vi test.txt  >> add content to check <<
+        			  
+			   # git add test.txt 		  
+				
+               # git status >>to check the status of your currently added git repo<<
+
+               # git commit -m "git testing"	>>add coment for your git<<
+
+               # git push 
+           
+		     >>:Now It Will Ask YouR UserName And Email For Authentication:<<
+
+               # Username for 'https://github.com': avinash003
+               # Password for 'https://avinash003@github.com': xxxxxxxxxxx
+
+            >>: You have Successfully Pushed Git repo From Local To Git server :<<
+		          To Check You Can Visit On Your GitHub Account 
+
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________				  
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+                 
+			   
+						  
+						  
+						  
+						  
+						  
+						  
+						  
+						  
+						  
